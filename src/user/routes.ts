@@ -9,5 +9,7 @@ export const userRoutes = (fastify: FastifyInstance, options: any, done: HookHan
 
   fastify.addHook('preHandler', loginPreHandler).post('/users/login', UserOptions.loginOpts);
 
+  fastify.post('/users/logout', UserOptions.logoutOpts);
+
   done();
 };

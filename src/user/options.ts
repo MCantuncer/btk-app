@@ -25,4 +25,13 @@ export class UserOptions {
     },
     handler: UserManager.login,
   };
+
+  static logoutOpts = {
+    schema: {
+      response: {
+        200: ResponseMessage,
+      },
+    },
+    handler: UserManager.logout,
+  };
 }

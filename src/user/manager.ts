@@ -5,6 +5,7 @@ import { UserUtils } from './utils';
 import { verify } from 'argon2';
 import { STATUS_CODE } from '../base/enum';
 import { buildResponse } from '../utils/response';
+import moment from 'moment';
 
 export class UserManager {
   static upsert = async (request: FastifyRequest, reply: FastifyReply) => {
@@ -37,5 +38,13 @@ export class UserManager {
       const response = buildResponse(null, STATUS_CODE.UNAUTHORIZED, 'Password is incorrect.');
       reply.code(STATUS_CODE.UNAUTHORIZED).send(response);
     }
+  };
+
+  static logout = async (request: FastifyRequest, reply: FastifyReply) => {
+    reply.setCookie('userId', 'expired', {
+      expires: moment().subtract(1, 'day').toDate(),
+    });
+
+    reply.code(STATUS_CODE.SUCCESS).send(buildResponse(null, STATUS_CODE.SUCCESS, 'Successfully logged out'));
   };
 }
