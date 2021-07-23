@@ -1,0 +1,35 @@
+{
+   "compilerOptions": {
+      "baseUrl": "./src",
+      "outDir": "./dist",
+      "module": "commonjs",
+      "declaration": true,
+      "target": "es2019",
+      "lib": [
+         "es6",
+         "esnext.asynciterable"
+      ],
+      "sourceMap": true,
+      "allowJs": true,
+      "moduleResolution": "node",
+      "forceConsistentCasingInFileNames": true,
+      "noImplicitReturns": true,
+      "noImplicitThis": true,
+      "noImplicitAny": true,
+      "strictNullChecks": true,
+      "suppressImplicitAnyIndexErrors": true,
+      "noUnusedLocals": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "types": ["reflect-metadata", "node", "jest"],
+      "resolveJsonModule": true
+   },
+   "exclude": [
+      "node_modules",
+      "build",
+      "jest",
+      "dist"
+   ]
+}
