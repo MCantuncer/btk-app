@@ -4,7 +4,7 @@ import { ModelUtils } from '../helpers/database';
 import { UserUtils } from './utils';
 import { verify } from 'argon2';
 import { STATUS_CODE } from '../base/enum';
-import { loginResponse } from '../utils/response';
+import { buildResponse } from '../utils/response';
 
 export class UserManager {
   static upsert = async (request: FastifyRequest, reply: FastifyReply) => {
@@ -15,7 +15,13 @@ export class UserManager {
 
     const { result, isUpdate } = await ModelUtils.saveModel(UserModel, user);
 
-    reply.code(isUpdate ? STATUS_CODE.UPDATED : STATUS_CODE.CREATED).send(result);
+    if (isUpdate) {
+      const response = buildResponse(result, STATUS_CODE.UPDATED, 'User is successfully updated.');
+      reply.code(STATUS_CODE.UPDATED).send(response);
+    } else {
+      const response = buildResponse(result, STATUS_CODE.CREATED, 'User is successfully created.');
+      reply.code(STATUS_CODE.CREATED).send(response);
+    }
   };
 
   static login = async (request: FastifyRequest, reply: FastifyReply) => {
@@ -24,11 +30,11 @@ export class UserManager {
     const user = await UserModel.findOne({ email: email }).exec();
 
     if (await verify(user!.password, credentials.password)) {
-      const response = loginResponse(user, 200, 'Successfully logged in.');
+      const response = buildResponse(user, STATUS_CODE.SUCCESS, 'Successfully logged in.');
       reply.cookie('userId', user!._id);
       reply.code(STATUS_CODE.SUCCESS).send(response);
     } else {
-      const response = loginResponse(null, 401, 'Password is incorrect.');
+      const response = buildResponse(null, STATUS_CODE.UNAUTHORIZED, 'Password is incorrect.');
       reply.code(STATUS_CODE.UNAUTHORIZED).send(response);
     }
   };
